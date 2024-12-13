@@ -21,7 +21,7 @@ public class StudentController {
         return students;
     }
 
-    // GET với id
+    // GET {id}
     @GetMapping("/{id}")
     public Student getStudentById(@PathVariable int id) {
         for (Student student : students) {

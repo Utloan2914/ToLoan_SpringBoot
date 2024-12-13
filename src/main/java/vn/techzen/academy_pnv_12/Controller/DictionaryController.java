@@ -2,7 +2,6 @@ package vn.techzen.academy_pnv_12.Controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,7 +13,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:5173")
 public class DictionaryController {
     private Map<String, String> dictionary = new HashMap<>();
 
@@ -28,7 +26,7 @@ public class DictionaryController {
         dictionary.put("watermelon", "quả dưa hấu");
         dictionary.put("blueberry", "quả việt quất");
     }
-    // GET: Tìm kiếm từ điển
+
     @GetMapping("/dictionary/search")
     public ResponseEntity<Dictionary> searchDictionary(@RequestParam String word) {
         if (dictionary.containsKey(word)) {
