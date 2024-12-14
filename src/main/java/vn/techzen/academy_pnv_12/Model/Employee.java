@@ -19,4 +19,5 @@ public class Employee {
     private String gender;
     private double salary;
     private String phone;
+    private String department;
 }
