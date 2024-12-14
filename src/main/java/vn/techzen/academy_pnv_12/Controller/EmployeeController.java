@@ -1,10 +1,12 @@
 package vn.techzen.academy_pnv_12.Controller;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.techzen.academy_pnv_12.Exception.AppException;
+import vn.techzen.academy_pnv_12.Exception.ErrorCode;
 import vn.techzen.academy_pnv_12.Model.Employee;
+import vn.techzen.academy_pnv_12.Response.JsonResponse;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,26 +28,25 @@ public class EmployeeController {
     ));
 
     @GetMapping
-    public ResponseEntity<List<Employee>> getAllEmployees() {
+    public ResponseEntity<?> getAllEmployees() {
         logger.info("Fetching all employees");
-        return ResponseEntity.ok(employees);
+        return JsonResponse.ok("Successfully fetched employees", employees);
     }
-
     @PostMapping
-    public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee) {
+    public ResponseEntity<?> addEmployee(@RequestBody Employee employee) {
         if (!employee.getPhone().matches("^0[0-9]{9}$")) {
-            return ResponseEntity.badRequest().body(null);
+            throw new AppException(ErrorCode.INVALID_PHONE, "Invalid phone number: " + employee.getPhone());
         }
         employee.setId(UUID.randomUUID());
         employees.add(employee);
         logger.info("Added new employee: {}", employee.getName());
-        return ResponseEntity.ok(employee);
+        return JsonResponse.created("Employee added successfully", employee);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable UUID id, @RequestBody Employee updatedEmployee) {
+    public ResponseEntity<?> updateEmployee(@PathVariable UUID id, @RequestBody Employee updatedEmployee) {
         if (!updatedEmployee.getPhone().matches("^0[0-9]{9}$")) {
-            return ResponseEntity.badRequest().body(null);
+            throw new AppException(ErrorCode.INVALID_PHONE, "Invalid phone number: " + updatedEmployee.getPhone());
         }
 
         for (Employee employee : employees) {
@@ -56,22 +57,20 @@ public class EmployeeController {
                 employee.setSalary(updatedEmployee.getSalary());
                 employee.setPhone(updatedEmployee.getPhone());
                 logger.info("Updated employee: {}", employee.getName());
-                return ResponseEntity.ok(employee);
+                return JsonResponse.ok("Employee updated successfully", employee);
             }
         }
-        logger.warn("Employee with id {} not found", id);
-        return ResponseEntity.notFound().build();
+        throw new AppException(ErrorCode.EMPLOYEE_NOT_FOUND, "Employee with id " + id + " not found");
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable UUID id) {
+    public ResponseEntity<?> deleteEmployee(@PathVariable UUID id) {
         boolean removed = employees.removeIf(employee -> employee.getId().equals(id));
         if (removed) {
             logger.info("Deleted employee with id {}", id);
-            return ResponseEntity.noContent().build();
+            return JsonResponse.noContent("Employee deleted successfully");
         } else {
-            logger.warn("Employee with id {} not found", id);
-            return ResponseEntity.notFound().build();
+            throw new AppException(ErrorCode.EMPLOYEE_NOT_FOUND, "Employee with id " + id + " not found");
         }
     }
 }
