@@ -8,6 +8,7 @@ import vn.techzen.academy_pnv_12.Exception.AppException;
 import vn.techzen.academy_pnv_12.Exception.ErrorCode;
 import vn.techzen.academy_pnv_12.Model.Employee;
 import vn.techzen.academy_pnv_12.Response.JsonResponse;
+import vn.techzen.academy_pnv_12.DTO.EmployeeSearchRequest;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -78,34 +79,31 @@ public class EmployeeController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> searchEmployees(@RequestParam(required = false) String name,
-                                             @RequestParam(required = false) String birthDateFrom,
-                                             @RequestParam(required = false) String birthDateTo,
-                                             @RequestParam(required = false) String gender,
-                                             @RequestParam(required = false) Double salary,
-                                             @RequestParam(required = false) String phone) {
+    public ResponseEntity<?> searchEmployees(@ModelAttribute EmployeeSearchRequest searchRequest) {
         List<Employee> filteredEmployees = new ArrayList<>(employees);
 
-        if (name != null && !name.isEmpty()) {
-            filteredEmployees.removeIf(employee -> !employee.getName().toLowerCase().contains(name.toLowerCase()));
+        if (searchRequest.getName() != null && !searchRequest.getName().isEmpty()) {
+            filteredEmployees.removeIf(employee -> !employee.getName().toLowerCase().contains(searchRequest.getName().toLowerCase()));
         }
-        if (birthDateFrom != null
-                && !birthDateFrom.isEmpty()) {
-            LocalDate fromDate = LocalDate.parse(birthDateFrom);
+        if (searchRequest.getBirthDateFrom() != null && !searchRequest.getBirthDateFrom().isEmpty()) {
+            LocalDate fromDate = LocalDate.parse(searchRequest.getBirthDateFrom());
             filteredEmployees.removeIf(employee -> employee.getBirthDate().isBefore(fromDate));
         }
-        if (birthDateTo != null && !birthDateTo.isEmpty()) {
-            LocalDate toDate = LocalDate.parse(birthDateTo);
+        if (searchRequest.getBirthDateTo() != null && !searchRequest.getBirthDateTo().isEmpty()) {
+            LocalDate toDate = LocalDate.parse(searchRequest.getBirthDateTo());
             filteredEmployees.removeIf(employee -> employee.getBirthDate().isAfter(toDate));
         }
-        if (gender != null && !gender.isEmpty()) {
-            filteredEmployees.removeIf(employee -> !employee.getGender().equalsIgnoreCase(gender));
+        if (searchRequest.getGender() != null && !searchRequest.getGender().isEmpty()) {
+            filteredEmployees.removeIf(employee -> !employee.getGender().equalsIgnoreCase(searchRequest.getGender()));
         }
-        if (salary != null) {
-            filteredEmployees.removeIf(employee -> employee.getSalary() < salary);
+        if (searchRequest.getSalary() != null) {
+            filteredEmployees.removeIf(employee -> employee.getSalary() < searchRequest.getSalary());
         }
-        if (phone != null && !phone.isEmpty()) {
-            filteredEmployees.removeIf(employee -> !employee.getPhone().contains(phone));
+        if (searchRequest.getPhone() != null && !searchRequest.getPhone().isEmpty()) {
+            filteredEmployees.removeIf(employee -> !employee.getPhone().contains(searchRequest.getPhone()));
+        }
+        if (searchRequest.getDepartment() != null && !searchRequest.getDepartment().isEmpty()) {
+            filteredEmployees.removeIf(employee -> !employee.getDepartment().equalsIgnoreCase(searchRequest.getDepartment()));
         }
 
         return JsonResponse.ok("Successfully fetched filtered employees", filteredEmployees);

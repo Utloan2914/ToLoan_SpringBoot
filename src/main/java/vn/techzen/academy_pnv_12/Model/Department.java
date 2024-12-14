@@ -1,6 +1,5 @@
 package vn.techzen.academy_pnv_12.Model;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;
@@ -12,12 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Employee {
+public class Department {
     private UUID id;
     private String name;
-    private LocalDate birthDate;
-    private String gender;
-    private double salary;
-    private String phone;
-    private String department;
 }
