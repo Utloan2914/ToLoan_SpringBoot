@@ -1,17 +1,25 @@
 package vn.techzen.academy_pnv_12.Model;
 
+import java.util.List;
 import java.util.UUID;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Data
 @AllArgsConstructor
 @Getter
+@NoArgsConstructor
 @Setter
+@Entity
 public class Department {
-    private UUID id;
-    private String name;
+    @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Integer id;
+    String name;
+
+    @OneToMany(mappedBy = "department")
+    @JsonIgnore
+    List<Employee> employees;
+
 }

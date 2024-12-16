@@ -3,21 +3,33 @@ package vn.techzen.academy_pnv_12.Model;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-@Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Entity
 @Setter
 public class Employee {
+    @Id
+        @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
-    private LocalDate birthDate;
+    private LocalDate dob;
     private String gender;
     private double salary;
     private String phone;
-    private String department;
+    @ManyToOne
+    @JoinColumn(name = "department_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonBackReference
+    Department department;
+
+    @Column(name = "department_id", insertable = false, updatable = false)
+    Integer departmentId;
+
 }

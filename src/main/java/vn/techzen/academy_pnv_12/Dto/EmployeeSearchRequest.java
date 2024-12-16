@@ -1,4 +1,4 @@
-package vn.techzen.academy_pnv_12.DTO;
+package vn.techzen.academy_pnv_12.Dto;
 
 import lombok.Getter;
 import lombok.Setter;
