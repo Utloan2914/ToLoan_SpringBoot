@@ -1,6 +1,10 @@
 package vn.techzen.academy_pnv_12.Controller;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -23,6 +27,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/employees")
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class EmployeeController {
 
     IEmployeeService employeeService;
@@ -85,11 +90,18 @@ public class EmployeeController {
             @RequestParam(value = "phone", required = false) String phone,
             @RequestParam(value = "departmentId", required = false) Integer departmentId,
             Pageable pageable) {
+
+        // Điều chỉnh tham số nếu cần thiết
         if (name != null && name.isEmpty()) name = null;
         if (salaryRange != null && salaryRange.isEmpty()) salaryRange = null;
         if (phone != null && phone.isEmpty()) phone = null;
         if (departmentId != null && departmentId == -1) departmentId = null;
-        Page <EmployeeResponse> filteredEmployees = employeeService.getFilteredEmployees(name, dobFrom, dobTo, gender, salaryRange, phone, departmentId, pageable);
+
+        // Gọi service để lấy danh sách nhân viên đã lọc
+        Page<EmployeeResponse> filteredEmployees = employeeService.getFilteredEmployees(name, dobFrom, dobTo, gender, salaryRange, phone, departmentId, pageable);
+
+        // Trả về phản hồi với kết quả
         return JsonResponse.ok(new PageResponse<>(filteredEmployees));
     }
+
 }
