@@ -1,14 +1,16 @@
 package vn.techzen.academy_pnv_12.Service;
 
+import org.springframework.data.domain.Page;
 import vn.techzen.academy_pnv_12.Dto.EmployeeResponse;
 import vn.techzen.academy_pnv_12.Model.Employee;
 
+import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 public interface IEmployeeService {
-    List<EmployeeResponse> getAllEmployees();
+    Page<EmployeeResponse> getAllEmployees(Pageable pageable);
     Employee getEmployee(UUID id);
 
     void addEmployee(Employee employee);
@@ -17,13 +19,14 @@ public interface IEmployeeService {
 
     void deleteEmployee(UUID id);
 
-    List<EmployeeResponse> getFilteredEmployees(
+    Page<EmployeeResponse> getFilteredEmployees(
             String name,
             LocalDate dobFrom,
             LocalDate dobTo,
             String gender,
             String salaryRange,
             String phone,
-            Integer departmentId
+            Integer departmentId,
+            Pageable pageable
     );
 }

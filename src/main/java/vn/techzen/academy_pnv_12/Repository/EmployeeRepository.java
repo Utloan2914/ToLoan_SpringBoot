@@ -5,6 +5,5 @@ import vn.techzen.academy_pnv_12.Model.Employee;
 
 import java.util.UUID;
 
-public interface EmployeeRepository  {
-
+public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
 }

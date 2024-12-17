@@ -1,12 +1,13 @@
 package vn.techzen.academy_pnv_12.Controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.techzen.academy_pnv_12.Dto.EmployeeResponse;
+import vn.techzen.academy_pnv_12.Dto.page.PageResponse;
 import vn.techzen.academy_pnv_12.Exception.AppException;
 import vn.techzen.academy_pnv_12.Exception.ErrorCode;
 import vn.techzen.academy_pnv_12.Response.ApiResponse;
@@ -14,8 +15,9 @@ import vn.techzen.academy_pnv_12.Service.IEmployeeService;
 import vn.techzen.academy_pnv_12.Model.Employee;
 import vn.techzen.academy_pnv_12.Response.JsonResponse;
 
+
+import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -26,9 +28,9 @@ public class EmployeeController {
     IEmployeeService employeeService;
 
     @GetMapping
-    public ResponseEntity<?> getAllEmployees() {
-        List<EmployeeResponse> employees = employeeService.getAllEmployees();
-        return JsonResponse.ok(employees);
+    public ResponseEntity<?> getAllEmployees(Pageable pageable) {
+        Page<EmployeeResponse> employees = employeeService.getAllEmployees(pageable);
+        return JsonResponse.ok(new PageResponse<>(employees));
     }
 
     @GetMapping("/{id}")
@@ -41,7 +43,7 @@ public class EmployeeController {
         }
     }
 
-    @PostMapping("/add/{id}")
+    @PostMapping("/add")
     public ResponseEntity<?> addEmployee(@RequestBody Employee employee) {
         employeeService.addEmployee(employee);
         return JsonResponse.created(employee);
@@ -64,13 +66,13 @@ public class EmployeeController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable UUID id) {
-            Employee existingEmployee = employeeService.getEmployee(id);
-            if (existingEmployee != null) {
-                employeeService.deleteEmployee(id);
-                return JsonResponse.noContent();
-            } else {
-                throw new AppException(ErrorCode.EMPLOYEE_NOT_FOUND);
-            }
+        Employee existingEmployee = employeeService.getEmployee(id);
+        if (existingEmployee != null) {
+            employeeService.deleteEmployee(id);
+            return JsonResponse.noContent();
+        } else {
+            throw new AppException(ErrorCode.EMPLOYEE_NOT_FOUND);
+        }
     }
 
     @GetMapping("/search")
@@ -81,12 +83,13 @@ public class EmployeeController {
             @RequestParam(value = "gender", required = false) String gender,
             @RequestParam(value = "salaryRange", required = false) String salaryRange,
             @RequestParam(value = "phone", required = false) String phone,
-            @RequestParam(value = "departmentId", required = false) Integer departmentId) {
+            @RequestParam(value = "departmentId", required = false) Integer departmentId,
+            Pageable pageable) {
         if (name != null && name.isEmpty()) name = null;
         if (salaryRange != null && salaryRange.isEmpty()) salaryRange = null;
         if (phone != null && phone.isEmpty()) phone = null;
         if (departmentId != null && departmentId == -1) departmentId = null;
-        List<EmployeeResponse> filteredEmployees = employeeService.getFilteredEmployees(name, dobFrom, dobTo, gender, salaryRange, phone, departmentId);
-        return JsonResponse.ok(filteredEmployees);
+        Page <EmployeeResponse> filteredEmployees = employeeService.getFilteredEmployees(name, dobFrom, dobTo, gender, salaryRange, phone, departmentId, pageable);
+        return JsonResponse.ok(new PageResponse<>(filteredEmployees));
     }
 }

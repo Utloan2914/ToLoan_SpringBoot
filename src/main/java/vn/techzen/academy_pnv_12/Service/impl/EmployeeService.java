@@ -2,6 +2,7 @@ package vn.techzen.academy_pnv_12.Service.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import vn.techzen.academy_pnv_12.Dto.EmployeeResponse;
 import vn.techzen.academy_pnv_12.Model.Employee;
@@ -9,6 +10,7 @@ import vn.techzen.academy_pnv_12.Repository.EmployeeRepository;
 import vn.techzen.academy_pnv_12.Repository.IEmployeeRepository;
 import vn.techzen.academy_pnv_12.Service.IEmployeeService;
 
+import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +23,8 @@ public class EmployeeService implements IEmployeeService {
     IEmployeeRepository employees;
 
     @Override
-    public List<EmployeeResponse> getAllEmployees() {
-        return employees.findAllWithDepartment();
+    public Page<EmployeeResponse> getAllEmployees(Pageable pageable) {
+        return employees.findAllWithDepartment(pageable);
     }
 
     @Override
@@ -51,9 +53,9 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public List<EmployeeResponse> getFilteredEmployees(
+    public Page<EmployeeResponse> getFilteredEmployees(
             String name, LocalDate dobFrom, LocalDate dobTo, String gender,
-            String salaryRange, String phone, Integer departmentId) {
-        return employees.getFilteredEmployees(name, dobFrom, dobTo, gender, salaryRange, phone, departmentId);
+            String salaryRange, String phone, Integer departmentId, Pageable pageable) {
+        return employees.getFilteredEmployees(name, dobFrom, dobTo, gender, salaryRange, phone, departmentId, pageable);
     }
 }

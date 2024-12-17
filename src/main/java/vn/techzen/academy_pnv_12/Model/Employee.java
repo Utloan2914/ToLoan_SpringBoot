@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -17,7 +16,7 @@ import lombok.experimental.FieldDefaults;
 @Setter
 public class Employee {
     @Id
-        @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
     private LocalDate dob;
@@ -31,5 +30,4 @@ public class Employee {
 
     @Column(name = "department_id", insertable = false, updatable = false)
     Integer departmentId;
-
 }

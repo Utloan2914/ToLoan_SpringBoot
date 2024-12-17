@@ -1,14 +1,13 @@
 package vn.techzen.academy_pnv_12.Repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import vn.techzen.academy_pnv_12.Dto.EmployeeResponse;
 import vn.techzen.academy_pnv_12.Model.Employee;
 
-
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 public interface IEmployeeRepository extends JpaRepository<Employee, UUID> {
@@ -29,18 +28,18 @@ public interface IEmployeeRepository extends JpaRepository<Employee, UUID> {
             "  (:salaryRange = '10-20' AND e.salary BETWEEN 10000000 AND 20000000) OR " +
             "  (:salaryRange = 'gte20' AND e.salary >= 20000000)" +
             ")")
-    List<EmployeeResponse> getFilteredEmployees(
+    Page<EmployeeResponse> getFilteredEmployees(
             String name,
             LocalDate dobFrom,
             LocalDate dobTo,
             String gender,
             String salaryRange,
             String phone,
-            Integer departmentId);
+            Integer departmentId,
+            Pageable pageable);
 
     @Query("SELECT new vn.techzen.academy_pnv_12.Dto.EmployeeResponse(e, d) " +
             "FROM Employee e " +
             "JOIN e.department d")
-    List<EmployeeResponse> findAllWithDepartment();
-
+    Page<EmployeeResponse> findAllWithDepartment(Pageable pageable);
 }
