@@ -1,17 +1,20 @@
 package vn.techzen.academy_pnv_12.Controller;
 
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.techzen.academy_pnv_12.Dto.employee.EmployeeRequest;
 import vn.techzen.academy_pnv_12.Dto.employee.EmployeeResponse;
 import vn.techzen.academy_pnv_12.Dto.page.PageResponse;
 import vn.techzen.academy_pnv_12.Exception.AppException;
 import vn.techzen.academy_pnv_12.Exception.ErrorCode;
+import vn.techzen.academy_pnv_12.Mapper.IEmployeeMapper;
 import vn.techzen.academy_pnv_12.Response.ApiResponse;
 import vn.techzen.academy_pnv_12.Service.IEmployeeService;
 import vn.techzen.academy_pnv_12.Model.Employee;
@@ -26,9 +29,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class EmployeeController {
-
     IEmployeeService employeeService;
-
+    @Qualifier("IEmployeeMapper")
+    IEmployeeMapper employeeMapper;
     @GetMapping
     public ResponseEntity<?> getAllEmployees(Pageable pageable) {
         Page<EmployeeResponse> employees = employeeService.getAllEmployees(pageable);
@@ -45,25 +48,20 @@ public class EmployeeController {
         }
     }
 
+
+
     @PostMapping("/add")
-    public ResponseEntity<?> addEmployee(@RequestBody Employee employee) {
+    public ResponseEntity<?> addEmployee(@Valid @RequestBody EmployeeRequest employeeRequest) {
+        Employee employee = employeeMapper.employeeRequestToEmployee(employeeRequest);
         employeeService.addEmployee(employee);
         return JsonResponse.created(employee);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateEmployee(@PathVariable UUID id, @RequestBody Employee updatedEmployee) {
-        if (updatedEmployee == null || updatedEmployee.getName() == null || updatedEmployee.getDob() == null || updatedEmployee.getGender() == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        Employee existingEmployee = employeeService.getEmployee(id);
-        if (existingEmployee != null) {
-            employeeService.updateEmployee(id, updatedEmployee);
-            return JsonResponse.ok(updatedEmployee);
-        } else {
-            throw new AppException(ErrorCode.EMPLOYEE_NOT_FOUND);
-        }
+    public ResponseEntity<?> updateEmployee(@PathVariable UUID id, @Valid @RequestBody EmployeeRequest updatedEmployeeRequest) {
+        Employee updatedEmployee = employeeMapper.employeeRequestToEmployee(updatedEmployeeRequest);
+        employeeService.updateEmployee(id, updatedEmployee);
+        return JsonResponse.ok(updatedEmployee);
     }
 
     @DeleteMapping("/delete/{id}")
