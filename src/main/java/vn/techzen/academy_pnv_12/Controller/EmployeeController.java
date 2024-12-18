@@ -91,16 +91,13 @@ public class EmployeeController {
             @RequestParam(value = "departmentId", required = false) Integer departmentId,
             Pageable pageable) {
 
-        // Điều chỉnh tham số nếu cần thiết
         if (name != null && name.isEmpty()) name = null;
         if (salaryRange != null && salaryRange.isEmpty()) salaryRange = null;
         if (phone != null && phone.isEmpty()) phone = null;
         if (departmentId != null && departmentId == -1) departmentId = null;
 
-        // Gọi service để lấy danh sách nhân viên đã lọc
         Page<EmployeeResponse> filteredEmployees = employeeService.getFilteredEmployees(name, dobFrom, dobTo, gender, salaryRange, phone, departmentId, pageable);
 
-        // Trả về phản hồi với kết quả
         return JsonResponse.ok(new PageResponse<>(filteredEmployees));
     }
 
