@@ -28,7 +28,6 @@ public class Employee {
     @JoinColumn(name = "department_id", referencedColumnName = "id", insertable = false, updatable = false)
     @JsonBackReference
     Department department;
-
     @Column(name = "department_id", insertable = false, updatable = false)
     Integer departmentId;
 }

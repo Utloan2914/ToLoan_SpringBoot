@@ -6,7 +6,6 @@ import vn.techzen.academy_pnv_12.Model.Department;
 
 import java.time.LocalDate;
 import java.util.UUID;
-
 @Setter
 @Getter
 @Builder

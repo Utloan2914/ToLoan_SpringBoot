@@ -9,7 +9,6 @@ import vn.techzen.academy_pnv_12.Model.Employee;
 
 import java.time.LocalDate;
 import java.util.UUID;
-
 public interface IEmployeeRepository extends JpaRepository<Employee, UUID> {
     @Query("SELECT e FROM Employee e WHERE " +
             "( :name IS NULL OR e.name LIKE %:name% ) AND " +
@@ -28,7 +27,4 @@ public interface IEmployeeRepository extends JpaRepository<Employee, UUID> {
             String phone,
             Integer departmentId,
             Pageable pageable);
-
-
-
 }

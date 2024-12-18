@@ -15,7 +15,6 @@ public interface IEmployeeService {
     Page<EmployeeResponse> getFilteredEmployees(
             String name, LocalDate dobFrom, LocalDate dobTo, String gender,
             String salaryRange, String phone, Integer departmentId, Pageable pageable);
-
     Employee getEmployee(UUID id);
     void addEmployee(Employee employee);
     void updateEmployee(UUID id, Employee updatedEmployee);

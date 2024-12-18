@@ -13,7 +13,6 @@ public class JsonResponse {
     public static <T> ResponseEntity<ApiResponse<T>> created(T data) {
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.<T>builder().data(data).build());
     }
-
     public static ResponseEntity<Void> noContent() {
         return ResponseEntity.noContent().build();
     }

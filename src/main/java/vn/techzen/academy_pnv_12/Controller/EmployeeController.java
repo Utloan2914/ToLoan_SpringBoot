@@ -2,9 +2,7 @@ package vn.techzen.academy_pnv_12.Controller;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -18,7 +16,6 @@ import vn.techzen.academy_pnv_12.Response.ApiResponse;
 import vn.techzen.academy_pnv_12.Service.IEmployeeService;
 import vn.techzen.academy_pnv_12.Model.Employee;
 import vn.techzen.academy_pnv_12.Response.JsonResponse;
-
 
 import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;

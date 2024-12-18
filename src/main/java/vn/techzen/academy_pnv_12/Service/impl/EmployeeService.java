@@ -25,6 +25,7 @@ public  class EmployeeService implements IEmployeeService {
     @Autowired
     IEmployeeRepository employeeRepository;
 
+    @Autowired
     @Qualifier("")
     IEmployeeMapper employeeMapper;
 
@@ -61,12 +62,10 @@ public  class EmployeeService implements IEmployeeService {
             employeeRepository.save(updatedEmployee);
         }
     }
-
     @Override
     public void deleteEmployee(UUID id) {
         employeeRepository.deleteById(id);
     }
-
     @Override
     public ResponseEntity<EmployeeResponse> findAll(Pageable pageable) {
         return null;
