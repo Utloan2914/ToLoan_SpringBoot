@@ -1,4 +1,4 @@
-package vn.techzen.academy_pnv_12.Dto;
+package vn.techzen.academy_pnv_12.Dto.employee;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,5 +12,5 @@ public class EmployeeSearchRequest {
     private String gender;
     private Double salary;
     private String phone;
-    private String department;
+    private  Integer departmentId;
 }

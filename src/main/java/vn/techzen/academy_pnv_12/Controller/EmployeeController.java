@@ -10,7 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.techzen.academy_pnv_12.Dto.EmployeeResponse;
+import vn.techzen.academy_pnv_12.Dto.employee.EmployeeResponse;
 import vn.techzen.academy_pnv_12.Dto.page.PageResponse;
 import vn.techzen.academy_pnv_12.Exception.AppException;
 import vn.techzen.academy_pnv_12.Exception.ErrorCode;

@@ -1,10 +1,11 @@
-package vn.techzen.academy_pnv_12.Dto;
+package vn.techzen.academy_pnv_12.Dto.employee;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import vn.techzen.academy_pnv_12.Model.Department;
-import vn.techzen.academy_pnv_12.Model.Employee;
+
+import java.time.LocalDate;
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -12,8 +13,12 @@ import vn.techzen.academy_pnv_12.Model.Employee;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class EmployeeResponse {
-    Employee employee;
+    UUID id;
+    String name;
+    LocalDate dob;
+    String gender;
+    String phone;
+    Double salary;
     Department department;
 }
